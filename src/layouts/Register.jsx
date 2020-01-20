@@ -3,265 +3,244 @@ import {FormGroup,InputGroup,Button,RadioGroup, Radio,Tooltip,Intent} from '@blu
 // import { DateInput } from "@blueprintjs/datetime";
 import axios from "axios";
 
-
+import '@blueprintjs/core/lib/css/blueprint.css';
 import "./style/register.css";
+import { DateInput } from "@blueprintjs/datetime";
+
+const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+
+
 
 class RegisterLayOut extends Component {
-    state = {
-        isLoading:false,
-        showPassword:false,
-        FirstName:"",
-        LastName:"",
-        Email:"",
-        Password:"", 
-        RepeatPassword:"",
-        Gender:"MALE",
-        BirthDay:"1993/10/07",
-        //handle errors
-        Error:{
-            FirstName:false,
-            LastName:false,
-            Email:false,
-            Password:false
-        },
-        ErrorMessage:{
-            FirstName:"",
-            LastName:"",
-            Email:"",
-            Password:""
-        }
-    }
-    // handle click
-    handleLockClick=()=>{
-        this.setState({showPassword:!this.state.showPassword})
-    }
-    // handle functions
-    handleGenderChange=(event)=>{
-        this.setState({Gender:event.currentTarget.value})
-    }
-    handleFirstNameChange=(event)=>{
-        this.setState({FirstName:event.target.value})
-    }
-    handleLastNameChange=(event)=>{
-        this.setState({LastName:event.target.value})
-    }
-    handleEmailChange=(event)=>{
-        this.setState({Email:event.target.value})
-    }
-    handlePasswordChange=(event)=>{
-        this.setState({Password:event.target.value})
-    }
-    handleRepeatPasswordChange=(event)=>{
-        this.setState({RepeatPassword:event.target.value})
-    }
-    // handleBirthDayChange=(date,used)=>{
-    //     this.setState({BirthDay:date})
-    //     console.log(date.format("MM/DD/YYYY"))
-    // }
+    // see java class
+  constructor(props){
+    super(props);
+  }
 
-    checkValidate=()=>{
-        var isValid  = true;
-        this.isValidError={
-            FirstName:false,
-            LastName:false,
-            Email:false,
-            Password:false
-        };
-        
-        this.ErrorMessage={
-            FirstName:"",
-            LastName:"",
-            Email:"",
-            Password:""
-        }
-        //FirstName Check
-        if(this.state.FirstName ===""){
-            this.Error.FirstName = true
-            this.ErrorMessage.FirstName="First name cannot be empty"
-        } else if(! /^[a-zA-Z ]{2,30}$/.test(this.state.FirstName)){
-            this.Error.FirstName = true
-            this.ErrorMessage.FirstName="Not valid Name"
-        }
+  state = {
+    // all variables except gender are object type. because they are initialized to null.
+    firstName : null,
+    lastName : null,
+    email : null,
+    password : null,
+    gender:"MALE",
 
-        //Check Last Name 
-        if(this.state.LastName ===""){
-            this.Error.LastName = true
-            this.ErrorMessage.LastName="Last name cannot be empty"
-        } else if(! /^[a-zA-Z ]{2,30}$/.test(this.state.LastName)){
-            this.Error.LastName = true
-            this.ErrorMessage.LastName="Not valid Name"
-        }
 
-        //Check Email 
-        if(this.state.Email ===""){
-            this.Error.Email = true
-            this.ErrorMessage.Email="Email cannot be empty"
-        } else if(! /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(this.state.Email)){
-            this.Error.Email = true
-            this.ErrorMessage.Email="Not valid Email"
-        }
-
-        //Check Password
-        if(this.state.Password ===""){
-            this.Error.Password = true
-            this.ErrorMessage.Password="Password cannot be empty"
-        } else if(this.state.Password.length<8){
-            this.Error.Password = true
-            this.ErrorMessage.Password="Pasword should have at least 8 character"
-        }else if(this.state.Password !== this.state.RepeatPassword){
-            this.Error.Password = true
-            this.ErrorMessage.Password="Paswords are not matched"
-        }
-
-        Object.keys(this.Error).map((value)=>{
-            if(this.Error[value]){
-                isValid = false 
-            }
-        }
-
-        )
-        // Submit Data
-        if(isValid){
-            this.DataSubmit()
-        }
-        
-        // set State
-        this.setState({Error:this.Error,ErrorMessage:this.ErrorMessage})
+    formErrors : {
+      // No error for gender. because it has defult value
+      firstName : "",
+      lastName : "",
+      email : "",
+      password : "",
         
     }
+  }
 
-    // get intent 
-    getIntent=(feild)=>{
-        if(this.state.Error[feild]){
-            return "danger"
+  // form validation function.
+  // Passing parameters is the state of the class. formErrors is one parameter.
+  // other variables of the state are taken as one parameter. (...variable_name)
+  // when we passing objects we need to use curly brackets.
+  formValid = ({formErrors,...rest})=>{
+    let valid = true;
+    // Reading variables of a object. If any variable of formErrors object have string (error) set valid as false
+    Object.values(formErrors).forEach(val => {
+      (val.length>0 ) &&(valid = false);
+    });
+  
+    // checking the objects of the state except formErrors , whether they are null
+    if(valid!==false){
+      // rest is a object containg objects.
+      Object.values(rest).forEach(val =>{
+        if(val===null){
+          valid = false;
         }
-        console.log(this.state.Error[feild])
-        return "primary"
+      }) 
     }
 
-    //Send Request
-    DataSubmit=()=> {
-        const Request_Body =
-            {
-                "FirstName":this.state.FirstName,
-                "LastName":this.state.LastName,
-                "Email":this.state.Email,
-                "Password":this.state.Password,
-                "Gender":this.state.Gender,
-                "BirthDay":"2020/10/10"
-            }
-        this.setState({isLoading:true})
-        axios.post(`http://localhost:8081/Register/Student`, Request_Body).then(response => {
-          console.log(response);
-          if(response.status === 201){
-              console.log("login");
-              this.props.history.push("/login");
-              this.setState({isLoading:false})
-          }
-          
-        },
-        error=>{
-            console.log(error);
-            console.log(error.data);
-            this.setState({isLoading:false}) 
-        });
-        
-      }
+    return valid;
+  };
 
+
+  // When inputing datas to the form this function will be called. (like typing)
+  // "e" means event. (It is a class.It has a object called target. 
+  // In target object there are 2 variables called key and value. 
+  // key = name of the element. name of the element should same as state variable.
+  // value = the data that we input. 
+  // When inputing datas , event is passing to the function.
+  handleChange = (e)=>{
     
+    // declare a new object and reference it to e.target object
+    const {name , value} = e.target;
+    console.log(name,value)
 
-    render() { 
-        const lockButton = (
-            <Tooltip content={`${this.state.showPassword ? "Hide" : "Show"} Password`}>
-                <Button
-                    // disabled={disabled}
-                    icon={this.state.showPassword ? "eye-open" : "eye-off"}
-                    intent={Intent.WARNING}
-                    minimal={true}
-                    onClick={this.handleLockClick}
-                />
-            </Tooltip>
-        );
+    // declare a new object and reference it to formErrors object
+    let formErrors = this.state.formErrors;
 
-        return (
+  
+    switch(name){
+      // if name of the passing event is "firstName" , then run this.
+      case "firstName" :
+        formErrors.firstName = value.length < 3 
+          ? "minimum 3 chars requires" : "";
+        break;
+  
+      case "lastName" :
+        formErrors.lastName = value.length < 3 
+          ? "minimum 3 chars requires" : "";
+        break;
+  
+      case "email" :
+        // emailRegex.test(value) : verifying the entered email
+        formErrors.email = value.length > 3 && emailRegex.test(value)
+          ? "" : "Invalid email address";
+        break;
+  
+      case "password" :
+          formErrors.password = value.length < 6 
+            ? "minimum 6 chars requires" : "";
+          break;
 
-            <div className="Register-container">
-                <div className="image">
-                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80" alt=""/>
-                </div>
-                <div className="form">
-                    <div className="inputs">
-                        <h1 className="bp3-heading">Student Register</h1>
-                            <FormGroup
-                                helperText={this.state.ErrorMessage.FirstName}
-                                label="First Name"
-                                // labelFor="text-input"
-                            >
-                                <InputGroup id="text-input" intent={this.getIntent("FirstName")}  placeholder="First Name" value={this.state.FirstName} onChange={this.handleFirstNameChange} />
-                            </FormGroup>
-                            <FormGroup
-                                helperText={this.state.ErrorMessage.LastName}
-                                label="Last Name"
-                                // labelFor="text-input"
-                            >
-                                <InputGroup id="text-input" intent={this.getIntent("LastName")} placeholder="Last Name" value={this.state.LastName}  onChange={this.handleLastNameChange} />
-                            </FormGroup>
-                            <FormGroup
-                                helperText={this.state.ErrorMessage.Email}
-                                label="Email"
-                                // labelFor="text-input"
-                            >
-                                <InputGroup  intent={this.getIntent("Email")} placeholder="Email" value = {this.state.Email} onChange = {this.handleEmailChange}/>
-                            </FormGroup>
-                            <FormGroup
-                                helperText={this.state.ErrorMessage.Password}
-                                label="Password"
-                                // labelFor="text-input"
-                            >
-                                <InputGroup id="text-input" rightElement={lockButton} type={this.state.showPassword ? "text":"password"} intent={this.getIntent("Password")} placeholder="Password" value = {this.state.Password} onChange = {this.handlePasswordChange}/>
-                            </FormGroup>
-                            <FormGroup
-                                // helperText="Helper text with details..."
-                                label="Repeat Password"
-                                // labelFor="text-input"
-                            >
-                                <InputGroup id="text-input" type="password" intent={this.getIntent("Password")} placeholder="Repeat Password" value={this.state.RepeatPassword} onChange={this.handleRepeatPasswordChange} />
-                            </FormGroup>
-                            
-                            <RadioGroup
-                                label="Gender"
-                                inline={true}
-                                onChange={this.handleGenderChange}
-                                selectedValue={this.state.Gender}
-                            >
-                                <Radio id="as"  label="Male" value="MALE" />
-                                <Radio id="as" label="Female" value="FEMALE" />
-                                
-                            </RadioGroup>
-                            {/* <FormGroup
-                                // helperText="Helper text with details..."
-                                label="Birth Day"
-                                // labelFor="text-input"
-                            >
-                            <DateInput
-                                formatDate={date => date.toLocaleString()}
-                                onChange ={this.handleBirthDayChange}
-                                parseDate={str => new Date(str)}
-                                placeholder={"M/D/YYYY"}
-                                value={this.state.BirthDay}
-                            />
-                            </FormGroup> */}
-
-                            <FormGroup>
-                                <Button intent="success" text="Sign In" onClick={this.checkValidate}   loading={this.state.isLoading} />
-                            </FormGroup>
-                            
-                        </div>
-                </div>
-            </div>
-            
-            );
+        break;
     }
+
+    // this.setState({formErrors})    :  when the state name and passed variable name is same , we can passed like this.
+    // this.setState([key] : value)   :  when passing key and value
+    //                                            call back function
+    this.setState({formErrors , [name]: value} , () => console.log(this.state));
+    
+  }
+
+// this is a another way of handling events
+// -----------------------------------------
+  // handleGenderChange=(e)=>{
+  //   this.setState({gender:e.target.value} )
+  // }
+  
+
+// when submitting the form this func will be called. 
+  handleSubmit =(e)=>{
+    // disable the pre buit funcs.
+    e.preventDefault();
+
+    // when formValid is true
+    if (this.formValid(this.state)){
+      // A way of printing in console
+      // "$" is used to access variables
+      console.log(`
+                  --Submitting--
+        FirstName : ${this.state.firstName}
+        LastName : ${this.state.lastName}
+        Email : ${this.state.email}
+        Password : ${this.state.password}
+        Gender : ${this.state.gender}
+      `)
+    }
+    else{
+      // if formValid is false give error
+      console.error("INVALID SUBMIT")
+    }
+  }
+
+  
+
+  render() { 
+    return ( 
+      <div className = "container">
+          <div className="form-div">
+            
+            <FormGroup
+              intent = "danger"
+              label="First Name"
+              labelFor="firstName"
+              // form errors regarding to first name will be displayed
+              helperText = {this.state.formErrors.firstName}
+            >
+              <InputGroup 
+              // if form errors regarding to first name exists , intent will be danger
+              intent = {this.state.formErrors.firstName.length > 0 ? "danger" : "none"}
+              name="firstName" 
+              placeholder="Sachintha" 
+              // when typing handleChange func will be run
+              onChange = {this.handleChange}/>
+            </FormGroup>
+            
+             
+
+            <FormGroup
+              intent = "danger"
+              label="Last Name"
+              labelFor="lastName"
+              helperText = {this.state.formErrors.lastName}
+            >
+              <InputGroup 
+              intent = {this.state.formErrors.lastName.length > 0 ? "danger" : "none"}
+              name="lastName" 
+              placeholder="Gunathilaka" 
+              onChange = {this.handleChange}
+              />
+            </FormGroup>
+
+
+            <FormGroup
+              intent = "danger"
+              label="Email"
+              labelFor="email"
+              helperText = {this.state.formErrors.email}
+            >
+              <InputGroup 
+              intent = {this.state.formErrors.email.length > 0 ? "danger" : "none"}
+              name="email" 
+              placeholder="sachi.lifef@gmail.com" 
+              onChange = {this.handleChange}
+              />
+            </FormGroup>
+
+
+            <FormGroup
+              intent = "danger"
+              label="Password"
+              labelFor="password"
+              helperText = {this.state.formErrors.password}
+            >
+              <InputGroup 
+              intent = {this.state.formErrors.password.length > 0 ? "danger" : "none"}
+              name="password" 
+              placeholder="" 
+              onChange = {this.handleChange}
+              />
+            </FormGroup>
+
+
+            <RadioGroup
+                inline = "true"
+                label="Gender"
+                name="gender"
+                onChange={this.handleChange}
+                selectedValue={this.state.gender}
+            >
+                <Radio label="Male" value="MALE" />
+                <Radio label="Female" value="FEMALE" />
+                <Radio label="Other" value="OTHER" />
+            </RadioGroup>
+
+            Birth Day 
+            <br/><br/>
+
+            <Button 
+            fill = "true"
+            className = "submit-button"
+            text = "Submit" 
+            type = "submit" 
+            onClick = {this.handleSubmit}
+            />
+
+
+    </div>
+      </div>
+      
+     );
+  }
 }
  
 export default RegisterLayOut ;
