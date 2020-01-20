@@ -146,97 +146,98 @@ class RegisterLayOut extends Component {
 
   render() { 
     return ( 
-      <div className = "container">
-          <div className="form-div">
-            
-            <FormGroup
-              intent = "danger"
-              label="First Name"
-              labelFor="firstName"
-              // form errors regarding to first name will be displayed
-              helperText = {this.state.formErrors.firstName}
-            >
-              <InputGroup 
-              // if form errors regarding to first name exists , intent will be danger
-              intent = {this.state.formErrors.firstName.length > 0 ? "danger" : "none"}
-              name="firstName" 
-              placeholder="Sachintha" 
-              // when typing handleChange func will be run
-              onChange = {this.handleChange}/>
-            </FormGroup>
-            
-             
+      <div className = "register">
+          <div className="register-form">
+                <div className="register-inputs">
+                    <h4 class="bp3-heading">Register</h4>
+                    <FormGroup
+                    intent = "danger"
+                    label="First Name"
+                    labelFor="firstName"
+                    // form errors regarding to first name will be displayed
+                    helperText = {this.state.formErrors.firstName}
+                    >
+                    <InputGroup 
+                    // if form errors regarding to first name exists , intent will be danger
+                    intent = {this.state.formErrors.firstName.length > 0 ? "danger" : "none"}
+                    name="firstName" 
+                    placeholder="Sachintha" 
+                    // when typing handleChange func will be run
+                    onChange = {this.handleChange}/>
+                    </FormGroup>
+                    
+                    
 
-            <FormGroup
-              intent = "danger"
-              label="Last Name"
-              labelFor="lastName"
-              helperText = {this.state.formErrors.lastName}
-            >
-              <InputGroup 
-              intent = {this.state.formErrors.lastName.length > 0 ? "danger" : "none"}
-              name="lastName" 
-              placeholder="Gunathilaka" 
-              onChange = {this.handleChange}
-              />
-            </FormGroup>
-
-
-            <FormGroup
-              intent = "danger"
-              label="Email"
-              labelFor="email"
-              helperText = {this.state.formErrors.email}
-            >
-              <InputGroup 
-              intent = {this.state.formErrors.email.length > 0 ? "danger" : "none"}
-              name="email" 
-              placeholder="sachi.lifef@gmail.com" 
-              onChange = {this.handleChange}
-              />
-            </FormGroup>
+                    <FormGroup
+                    intent = "danger"
+                    label="Last Name"
+                    labelFor="lastName"
+                    helperText = {this.state.formErrors.lastName}
+                    >
+                    <InputGroup 
+                    intent = {this.state.formErrors.lastName.length > 0 ? "danger" : "none"}
+                    name="lastName" 
+                    placeholder="Gunathilaka" 
+                    onChange = {this.handleChange}
+                    />
+                    </FormGroup>
 
 
-            <FormGroup
-              intent = "danger"
-              label="Password"
-              labelFor="password"
-              helperText = {this.state.formErrors.password}
-            >
-              <InputGroup 
-              intent = {this.state.formErrors.password.length > 0 ? "danger" : "none"}
-              name="password" 
-              placeholder="" 
-              onChange = {this.handleChange}
-              />
-            </FormGroup>
+                    <FormGroup
+                    intent = "danger"
+                    label="Email"
+                    labelFor="email"
+                    helperText = {this.state.formErrors.email}
+                    >
+                    <InputGroup 
+                    intent = {this.state.formErrors.email.length > 0 ? "danger" : "none"}
+                    name="email" 
+                    placeholder="sachi.lifef@gmail.com" 
+                    onChange = {this.handleChange}
+                    />
+                    </FormGroup>
 
 
-            <RadioGroup
-                inline = "true"
-                label="Gender"
-                name="gender"
-                onChange={this.handleChange}
-                selectedValue={this.state.gender}
-            >
-                <Radio label="Male" value="MALE" />
-                <Radio label="Female" value="FEMALE" />
-                <Radio label="Other" value="OTHER" />
-            </RadioGroup>
-
-            Birth Day 
-            <br/><br/>
-
-            <Button 
-            fill = "true"
-            className = "submit-button"
-            text = "Submit" 
-            type = "submit" 
-            onClick = {this.handleSubmit}
-            />
+                    <FormGroup
+                    intent = "danger"
+                    label="Password"
+                    labelFor="password"
+                    helperText = {this.state.formErrors.password}
+                    >
+                    <InputGroup 
+                    intent = {this.state.formErrors.password.length > 0 ? "danger" : "none"}
+                    name="password" 
+                    placeholder="" 
+                    onChange = {this.handleChange}
+                    />
+                    </FormGroup>
 
 
-    </div>
+                    <RadioGroup
+                        inline = "true"
+                        label="Gender"
+                        name="gender"
+                        onChange={this.handleChange}
+                        selectedValue={this.state.gender}
+                    >
+                        <Radio label="Male" value="MALE" />
+                        <Radio label="Female" value="FEMALE" />
+                        <Radio label="Other" value="OTHER" />
+                    </RadioGroup>
+
+                    Birth Day 
+                    <br/><br/>
+
+                    <Button 
+                    fill = "true"
+                    className = "submit-button"
+                    text = "Register" 
+                    type = "submit" 
+                    onClick = {this.handleSubmit}
+                    />
+
+                </div>
+            </div>
       </div>
       
      );

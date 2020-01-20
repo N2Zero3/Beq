@@ -142,7 +142,7 @@ export default class LoginLayOut extends Component {
                             <img src={require('./../assets/img/login/student.png')} width="100%" alt=""/>
                         </div>
                         <div className="inputs">
-                            {/* <h4 class="bp3-heading">LOGIN</h4> */}
+                            <h4 class="bp3-heading">LOGIN</h4>
                             <FormGroup
                                 helperText={this.state.ErrorMessage.UserName}
                                 label="User Name"
