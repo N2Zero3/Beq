@@ -8,6 +8,7 @@ import "./style/register.css";
 import { DateInput } from "@blueprintjs/datetime";
 
 const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const nameRegex = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
 
 
 
@@ -81,13 +82,13 @@ class RegisterLayOut extends Component {
     switch(name){
       // if name of the passing event is "firstName" , then run this.
       case "firstName" :
-        formErrors.firstName = value.length < 3 
-          ? "minimum 3 chars requires" : "";
+        formErrors.firstName = value.length > 3 && nameRegex.test(value)
+          ? "" : "Invalid Name";
         break;
   
       case "lastName" :
-        formErrors.lastName = value.length < 3 
-          ? "minimum 3 chars requires" : "";
+        formErrors.lastName = value.length > 3 && nameRegex.test(value)
+          ? "" : "Invalid Name";
         break;
   
       case "email" :
@@ -206,6 +207,7 @@ class RegisterLayOut extends Component {
               <InputGroup 
               intent = {this.state.formErrors.password.length > 0 ? "danger" : "none"}
               name="password" 
+              type="password"
               placeholder="" 
               onChange = {this.handleChange}
               />

@@ -138,9 +138,10 @@ export default class LoginLayOut extends Component {
             return (
                 <div className="sign-in">
                     <div className="form1">
-                        <div className="logo">
+                        <br/>
+                        {/* <div className="logo">
                             <img src={require('./../assets/img/login/student.png')} width="100%" alt=""/>
-                        </div>
+                        </div> */}
                         <div className="inputs">
                             {/* <h4 class="bp3-heading">LOGIN</h4> */}
                             <FormGroup
