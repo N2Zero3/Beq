@@ -186,78 +186,7 @@ class RegisterLayOut extends Component {
         return (
 
             <div className="Register-container">
-                <div className="image">
-                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80" alt=""/>
-                </div>
-                <div className="form">
-                    <div className="inputs">
-                        <h1 className="bp3-heading">Student Register</h1>
-                            <FormGroup
-                                helperText={this.state.ErrorMessage.FirstName}
-                                label="First Name"
-                                // labelFor="text-input"
-                            >
-                                <InputGroup id="text-input" intent={this.getIntent("FirstName")}  placeholder="First Name" value={this.state.FirstName} onChange={this.handleFirstNameChange} />
-                            </FormGroup>
-                            <FormGroup
-                                helperText={this.state.ErrorMessage.LastName}
-                                label="Last Name"
-                                // labelFor="text-input"
-                            >
-                                <InputGroup id="text-input" intent={this.getIntent("LastName")} placeholder="Last Name" value={this.state.LastName}  onChange={this.handleLastNameChange} />
-                            </FormGroup>
-                            <FormGroup
-                                helperText={this.state.ErrorMessage.Email}
-                                label="Email"
-                                // labelFor="text-input"
-                            >
-                                <InputGroup  intent={this.getIntent("Email")} placeholder="Email" value = {this.state.Email} onChange = {this.handleEmailChange}/>
-                            </FormGroup>
-                            <FormGroup
-                                helperText={this.state.ErrorMessage.Password}
-                                label="Password"
-                                // labelFor="text-input"
-                            >
-                                <InputGroup id="text-input" rightElement={lockButton} type={this.state.showPassword ? "text":"password"} intent={this.getIntent("Password")} placeholder="Password" value = {this.state.Password} onChange = {this.handlePasswordChange}/>
-                            </FormGroup>
-                            <FormGroup
-                                // helperText="Helper text with details..."
-                                label="Repeat Password"
-                                // labelFor="text-input"
-                            >
-                                <InputGroup id="text-input" type="password" intent={this.getIntent("Password")} placeholder="Repeat Password" value={this.state.RepeatPassword} onChange={this.handleRepeatPasswordChange} />
-                            </FormGroup>
-                            
-                            <RadioGroup
-                                label="Gender"
-                                inline={true}
-                                onChange={this.handleGenderChange}
-                                selectedValue={this.state.Gender}
-                            >
-                                <Radio id="as"  label="Male" value="MALE" />
-                                <Radio id="as" label="Female" value="FEMALE" />
-                                
-                            </RadioGroup>
-                            {/* <FormGroup
-                                // helperText="Helper text with details..."
-                                label="Birth Day"
-                                // labelFor="text-input"
-                            >
-                            <DateInput
-                                formatDate={date => date.toLocaleString()}
-                                onChange ={this.handleBirthDayChange}
-                                parseDate={str => new Date(str)}
-                                placeholder={"M/D/YYYY"}
-                                value={this.state.BirthDay}
-                            />
-                            </FormGroup> */}
-
-                            <FormGroup>
-                                <Button intent="success" text="Sign In" onClick={this.checkValidate}   loading={this.state.isLoading} />
-                            </FormGroup>
-                            
-                        </div>
-                </div>
+                Kalana
             </div>
             
             );
