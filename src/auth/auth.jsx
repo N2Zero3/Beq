@@ -1,5 +1,5 @@
 import jwtDecode from 'jwt-decode'
-import user from "./User"
+import user from "./user"
 
 
 class Auth{
@@ -19,19 +19,23 @@ class Auth{
     callBack()
   }
 
+  
 
-  isAuthenticated(){
+  isAuthenticated(allowedRoles){
     this.authenticated= true
     let Token = localStorage.getItem('Token')
-    let Profile = localStorage.getItem('Profile')
     try{
       let jwt_Decode = jwtDecode(Token)
-      this.user = new user(jwt_Decode,Profile)
-
+      this.user = new user(jwt_Decode)
+      // check Expire Time
       if (Date.now() >= jwt_Decode.exp * 1000) {
         this.authenticated = false;
       }
-      console.log(this.user )
+      // check Roles
+      if(! allowedRoles.includes(jwt_Decode.Role)){
+        this.authenticated = false;
+      }
+      
     }catch{
       this.authenticated = false;
     }

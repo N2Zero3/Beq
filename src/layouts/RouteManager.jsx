@@ -17,14 +17,10 @@ class RouteManager extends Component {
         return ( <BrowserRouter>
             <Switch>
                 <Route path="/Register" render={props => <RegisterLayOut {...props}/>} />
-              {/*<Route path="/" render={props => (localStorage.getItem('Token')  ?(<AdminLayout {...props} />):( <LoginLayOut {...props} />))} /> */}
-             
-              {/* <Route path="/admin" render={props => <AdminLayout {...props} />} />
-              <Redirect from="/" to="/admin/dashboard" /> */}
-
-               {/* <Route exact path="/" component={LandingPage} /> */}
+            
                 <Route path="/login" render={props => <LoginLayOut {...props}/>} />
-                <ProtectedRoute exact path="/" component={Student} />
+
+                <ProtectedRoute allowRoles={['STUDENT', 'ADMIN']} exact path="/" component={Student} />
                 <Route path="*" component={Page404} />
               
               
