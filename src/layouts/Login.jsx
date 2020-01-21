@@ -22,12 +22,10 @@ export default class LoginLayOut extends Component {
         }
     }
     // handle Functions 
-    handleUserNameChange=(event)=>{
-        this.setState({UserName:event.target.value})
-    }
-
-    handlePasswordChange=(event)=>{
-        this.setState({Password:event.target.value})
+    handleChange=(event)=>{
+        const {name,value} =event.target
+        this.setState({[name]:value})
+        this.Verify()
     }
 
     handleLock=()=>{
@@ -35,8 +33,7 @@ export default class LoginLayOut extends Component {
     }
 
     Verify=()=>{
-        let isValid= true;
-
+        
         let Error={
             UserName:false,
             Password:false
@@ -62,19 +59,6 @@ export default class LoginLayOut extends Component {
             Error.Password = true
             ErrorMessage.Password="Pasword should have at least 8 character"
         }
-
-        //check form input errors
-        Object.keys(Error).map((value)=>{
-            if(Error[value]){
-                isValid = false 
-            }
-        })
-
-        // Submit Data
-        if(isValid) {
-            this.DataSubmit()
-        }
-
         // set State
         this.setState({Error:Error,ErrorMessage:ErrorMessage})
     }
@@ -89,30 +73,44 @@ export default class LoginLayOut extends Component {
 
     //Send Request
     DataSubmit=()=> {
-        const Request_Body =
-            {
-                "UserName":this.state.UserName,
-                "Password":this.state.Password
+        let isValid= true;
+        //check form input errors
+        Object.keys(this.state.Error).map((value)=>{
+            if(this.state.Error[value]){
+                isValid = false 
             }
-        this.setState({isLoading:true})
-        axios.post(`http://localhost:8081/Student/Login`, Request_Body).then(response => {
-            console.log(response);
-            if(response.status === 200){
-                console.log("login");
+        })
+
+        // Submit Data
+        if(isValid) {
+            const Request_Body =
+                {
+                    "Email":this.state.UserName,
+                    "Password":this.state.Password
+                }
+            this.setState({isLoading:true})
+            axios.post(`http://localhost:8081/Student/Login`, Request_Body).then(response => {
                 console.log(response);
-                localStorage.setItem('Token', 
-                    response.data.token);
-                localStorage.setItem('Profile', 
-                    response.data.Profile);
-                this.props.history.push("/");
-                this.setState({isLoading:false})
-          }
-        },
-        error=>{
-            console.log(error);
-            console.log(error.data);
-            this.setState({isLoading:false}) 
-        });
+                if(response.status === 200){
+                    console.log("login");
+                    console.log(response);
+                    localStorage.setItem('Token', 
+                        response.data.token);
+                    localStorage.setItem('Profile', 
+                        response.data.Profile);
+                    this.props.history.push("/");
+                    this.setState({isLoading:false})
+            }
+            },
+            error=>{
+                console.log(error);
+                console.log(error.data);
+                this.setState({isLoading:false}) 
+                });
+                this.DataSubmit()
+            }
+
+        
         
       }
     componentWillMount(){
@@ -142,27 +140,27 @@ export default class LoginLayOut extends Component {
                             <img src={require('./../assets/img/login/student.png')} width="100%" alt=""/>
                         </div>
                         <div className="inputs">
-                            <h4 class="bp3-heading">LOGIN</h4>
+                            <h4 className="bp3-heading">LOGIN</h4>
                             <FormGroup
                                 helperText={this.state.ErrorMessage.UserName}
                                 label="User Name"
                                 // labelFor="text-input"
                             >
-                                <InputGroup id="text-input" placeholder="User Name" intent={this.getIntent("UserName")} value={this.state.UserName}  onChange={this.handleUserNameChange} />
+                                <InputGroup id="text-input" name="UserName" placeholder="User Name" intent={this.getIntent("UserName")} value={this.state.UserName}  onChange={this.handleChange} />
                             </FormGroup>
                             <FormGroup
                                 helperText={this.state.ErrorMessage.Password}
                                 label="Password"
                                 // labelFor="text-input"
                             >
-                                <InputGroup id="text-input"  intent={this.getIntent("Password")} placeholder="Password" value={this.state.Password} type={this.state.showPassword ? "text":"password"} onChange={this.handlePasswordChange} rightElement={lockButton} />
+                                <InputGroup id="text-input" name="Password"  intent={this.getIntent("Password")} placeholder="Password" value={this.state.Password} type={this.state.showPassword ? "text":"password"} onChange={this.handleChange} rightElement={lockButton} />
                             </FormGroup>
                             <FormGroup>
                                 <Checkbox checked={true} label="Remember Me"  />
                             </FormGroup>
 
                             <FormGroup>
-                                <Button intent="primary" text="Sign In" fill={true} onClick={this.Verify}  loading={this.state.isLoading} />
+                                <Button intent="primary" text="Sign In" fill={true} onClick={this.DataSubmit}  loading={this.state.isLoading} />
                             </FormGroup>
                             
                         </div>
