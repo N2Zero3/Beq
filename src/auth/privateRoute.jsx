@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import auth from "./auth";
+import Forward from './Forward'
 
 export const ProtectedRoute = ({
   component: Component,
@@ -13,7 +14,7 @@ export const ProtectedRoute = ({
       {...rest}
       render={props => {
         if (auth.isAuthenticated(allowRoles) ) {
-          return <Component {...props} />;
+          return <Forward component={Component} {...props} />;
         } else {
           return (
             <Redirect

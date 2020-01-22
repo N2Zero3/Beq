@@ -7,6 +7,7 @@ import Student from "layouts/Student.jsx"
 import { ProtectedRoute } from  "auth/privateRoute"
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
+
 import Page404 from './../pages/404'
 
 
@@ -20,7 +21,7 @@ class RouteManager extends Component {
             
                 <Route path="/login" render={props => <LoginLayOut {...props}/>} />
 
-                <ProtectedRoute allowRoles={['STUDENT', 'ADMIN']} exact path="/" component={Student} />
+                <ProtectedRoute allowRoles={['STUDENT', 'ADMIN']} exact path="/" component={Student} redirectPath="./login"  />
                 <Route path="*" component={Page404} />
               
               
