@@ -41,7 +41,7 @@ class Forward extends Component {
              {this.state.IsLoading?
              <div className="forward-Loading"> <div className="lds-ripple"><div></div><div></div><div></div><div></div></div></div>
              :
-            <this.props.component/>}
+            <this.props.component {...this.props}/>}
             </div>
          );
     }

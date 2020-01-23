@@ -12,7 +12,7 @@ import "./assets/css/pe-icon-7-stroke.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 
 
-import RouteManager from "./layouts/RouteManager"
+import RouteManager from "./auth/RouteManager"
 
 
 

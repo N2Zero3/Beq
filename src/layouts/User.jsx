@@ -1,19 +1,57 @@
 import React, { Component } from 'react';
-import "./style/student.css";
+import "./style/user.css";
+import { Route, Switch } from "react-router-dom";
 import {Popover,InputGroup,Button,ButtonGroup,Classes,Divider,Icon} from '@blueprintjs/core';
 import "@blueprintjs/icons"
 import logo from "./assets/logo/logo.png"
 // import user from "./assets/userProfile/user_01.png"
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faCoffee } from '@fortawesome/free-solid-svg-icons'
-import auth from './../auth/auth'
-import axios from "axios"
+import auth from '../auth/auth'
+import Sidebar from "./../components/Sidebar/SidebarUser"
 
-class Student extends Component {
+import {userRoute} from "routes.js";
+
+class User extends Component {
     state = { 
         showPopover: false,
         IsLoading:true   
     }
+    getRoutes = routes => {
+        return routes.map((prop, key) => {
+          if (prop.layout === "/user") {
+            return (
+              <Route
+                path={prop.layout + prop.path}
+                render={props => (
+                  <prop.component
+                    {...props}
+                    handleClick={this.handleNotificationClick}
+                  />
+                )}
+                key={key}
+              />
+            );
+          } else {
+            return null;
+          }
+        });
+    };
+    
+    getBrandText = path => {
+        for (let i = 0; i < userRoute.length; i++) {
+          if (
+            this.props.location.pathname.indexOf(
+                userRoute[i].layout + userRoute[i].path
+            ) !== -1
+          ) {
+            return userRoute[i].name;
+          }
+        }
+        this.props.history.push("/user/dashboard");
+        return "Brand";
+    };
+      
     handleInteraction=(nextOpenState)=> {
         this.setState({ showPopover: nextOpenState });
     }
@@ -25,6 +63,7 @@ class Student extends Component {
         const button3 =<Icon icon={"layers"} iconSize={Icon.SIZE_LARGE}/>
         const button4 =<Icon icon={"chat"} iconSize={Icon.SIZE_LARGE}/>
         const button5 =<Icon icon={"user"} iconSize={Icon.SIZE_LARGE}/>
+        console.log(this.props.location.pathname)
          return ( 
             <div className="main-container">
                 <nav>
@@ -71,21 +110,12 @@ class Student extends Component {
                      
                 </nav>
                 <div className="container">
-                    <div className="side-bar-left">
-                        
-                        <ul>
-                            <li>Home</li>
-                            <li>Questions</li>
-                            <li>Tags</li>
-                            <li>Users</li>
-                            <li>Unanswered</li>
-                        </ul>
-                    </div>
+                   <Sidebar routes={userRoute} {...this.props}/>
                     <div className="main">
                         <div className="Tag">
-                            <h4>Tag</h4>
+                            <p className="Tag-Name">{this.getBrandText(this.props.location.pathname)}</p>
                         </div>
-
+                        <Switch>{this.getRoutes(userRoute)}</Switch>
                     </div>
                     
                 </div>
@@ -97,4 +127,4 @@ class Student extends Component {
     }
 }
  
-export default Student;
+export default User;

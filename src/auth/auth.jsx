@@ -18,7 +18,17 @@ class Auth{
     localStorage.setItem('Profile',null)
     callBack()
   }
-
+  
+  getRole(){
+    let Token = localStorage.getItem('Token')
+    try{
+      let jwt_Decode = jwtDecode(Token)
+      return jwt_Decode.Role;
+    } catch{
+      return undefined
+    }
+    
+  }
   
 
   isAuthenticated(allowedRoles){
@@ -31,6 +41,9 @@ class Auth{
       if (Date.now() >= jwt_Decode.exp * 1000) {
         this.authenticated = false;
       }
+      console.log(allowedRoles.includes(jwt_Decode.Role))
+      console.log(jwt_Decode.Role)
+      console.log(allowedRoles)
       // check Roles
       if(! allowedRoles.includes(jwt_Decode.Role)){
         this.authenticated = false;

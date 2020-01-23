@@ -93,7 +93,7 @@ export default class LoginLayOut extends Component {
                 if(response.status === 200){
                     localStorage.setItem('Token', 
                         response.data.Data.token);
-                    this.props.history.push("/");
+                    this.props.history.push("/user");
                     this.setState({isLoading:false})
             }
             },
@@ -108,8 +108,8 @@ export default class LoginLayOut extends Component {
         
       }
     componentWillMount(){
-        if(auth.isAuthenticated()){
-            this.props.history.push("/");
+        if(auth.isAuthenticated(this.props.allowedRoles)){
+            this.props.history.push("/user/dashboard");
         }
     }
 

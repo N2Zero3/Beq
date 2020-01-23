@@ -8,7 +8,7 @@ import Icons from "views/Icons.jsx";
 // import Notifications from "views/Notifications.jsx";
 // import Upgrade from "views/Upgrade.jsx";
 
-export const dashboardRoutes = [
+const dashboardRoutes = [
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -69,46 +69,5 @@ export const dashboardRoutes = [
   //   layout: "/admin"
   // }
 ];
-export const userRoute = [
-  {
-    path: "/dashboard",
-    name: "Home",
-    icon: "pe-7s-graph",
-    component: UserProfile,
-    layout: "/user"
-   }
-   ,{
-    path: "/questions",
-    name: "Questions",
-    icon: "pe-7s-graph",
-    component: Icons,
-    layout: "/user"
-   }
-   ,{
-    path: "/tags",
-    name: "Tags",
-    icon: "pe-7s-graph",
-    component: Icons,
-    layout: "/user"
-   }
-   ,{
-    path: "/users",
-    name: "Users",
-    icon: "pe-7s-graph",
-    component: Icons,
-    layout: "/user"
-   }
-   ,{
-    path: "/unanswered",
-    name: "Unanswered",
-    icon: "pe-7s-graph",
-    component: Icons,
-    layout: "/user"
-   }
-   // <li>Home</li>
-              // <li>Questions</li>
-              // <li>Tags</li>
-              // <li>Users</li>
-              // <li>Unanswered</li>
-  ]
-export default {dashboardRoutes,userRoute} ;
+
+export default dashboardRoutes ;
